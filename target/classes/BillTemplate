@@ -1,0 +1,72 @@
+{
+  "template": "bill*",
+  "settings": {
+    "number_of_shards": 5
+  },
+  "mappings": {
+    "sbc": {
+      "dynamic_templates": [
+        {
+          "string": {
+            "match": "*",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "string",
+              "index": "not_analyzed"
+            }
+          }
+        }
+      ],
+      "properties": {
+        "lastName": {
+            "type": "string",
+            "index": "not_analyzed"
+        },
+        "balance": {
+            "type": "long"
+        },
+        "account_number": {
+            "type": "long"
+        },
+        "email": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values" : true
+        },
+        "address": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values": true
+        },
+        "age": {
+            "type": "long"
+        },
+        "state": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values": true
+        },
+        "employer": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values": true
+        },
+        "gender": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values": true
+        },
+        "firstName": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values": true
+        },
+        "city": {
+            "type": "string",
+            "index": "not_analyzed",
+            "doc_values": true
+        }
+      }
+    }
+  }
+}
