@@ -21,6 +21,9 @@ public class ESConfig {
     public static int timeInterval = 60;
     public static boolean useCache = true;
     
+    public static String clusterNameAnother = "CFLog";
+    public static String hostAnother = "10.10.102.82";
+    
     public static void init() throws Exception {
         LOG.info("Reading configuration:" + ESCONNECT_PROPERTIES);
         InputStream in = ESConfig.class.getClassLoader().getResourceAsStream(ESCONNECT_PROPERTIES);
@@ -40,5 +43,8 @@ public class ESConfig {
         zeromqAddress = props.getProperty("zeromqAddress");
         timeInterval = Integer.parseInt(props.getProperty("timeInterval"));
         useCache = Boolean.parseBoolean(props.getProperty("useCache"));
+        
+        hostAnother = props.getProperty("hostAnother");
+        clusterNameAnother = props.getProperty("clusterNameAnother");
     }
 }

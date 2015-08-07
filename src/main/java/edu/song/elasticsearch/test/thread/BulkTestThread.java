@@ -27,6 +27,10 @@ public class BulkTestThread extends Thread {
 	public BulkTestThread(String name) {
 		this.name = name;
 	}
+	public BulkTestThread(String name,String indexName){
+		this.name = name;
+		this.indexName = indexName;
+	}
 
 	/**
 	 * 设置路由值
@@ -107,7 +111,10 @@ public class BulkTestThread extends Thread {
 	}
 
 	public void bulk2() {
-		for (;; from += size) {
+		long totalMock = 0l;
+		long totalAll = 0l;
+		long totalTook = 0l;
+		for (;from<100000000;from += size) {
 
 			long mock = System.currentTimeMillis();
 			System.out.println(name + "-" + from + "##Mock: " + mock);
@@ -134,18 +141,26 @@ public class BulkTestThread extends Thread {
 			System.out.println(name + "-" + from + "##Took: " + bulkResponse.getTookInMillis());
 			long mockTime = start - mock;
 			long allTime = end - start;
+			totalMock += mockTime;
+			totalAll += allTime;
+			totalTook += bulkResponse.getTookInMillis();
+			double avgMock = (from+100000)/totalMock;
+			double avgTook = 0.5 * totalTook / (from + 100000);
+			double avgAll = 0.5 * totalAll / (from + 100000);
 			System.out.println(name + "-" + from + "####mock: " + mockTime + " ####all: " + allTime + " ####took: "
 					+ bulkResponse.getTookInMillis());
+			System.out.println(name + "-" + from + "####avgM: " + avgMock + " ####avgA: " + avgAll + " ####avgT: "
+					+ avgTook);
 		}
 	}
 
 	@Override
 	public void run() {
-		bulk2();
+		bulk();
 	}
 
 	public static void main(String[] args) {
-		BulkTestThread esBulk = new BulkTestThread("test");
+		BulkTestThread esBulk = new BulkTestThread("test","bilnot");
 		esBulk.start();
 	}
 }
