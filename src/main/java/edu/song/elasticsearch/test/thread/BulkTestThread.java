@@ -19,6 +19,7 @@ public class BulkTestThread extends Thread {
 	private String typeName = "sbc";
 	private int size = 100000;
 	private int from = 0;
+	private int count = 10000000;
 	private boolean idEnable = true;
 
 	@Nullable
@@ -53,6 +54,16 @@ public class BulkTestThread extends Thread {
 	}
 
 	/**
+	 * 设置总插入的doc数
+	 * @param count
+	 * @return
+	 */
+	public BulkTestThread count(int count){
+		this.count = count;
+		return this;
+	}
+	
+	/**
 	 * bill account_num起始值
 	 * @param from
 	 * @return
@@ -76,7 +87,10 @@ public class BulkTestThread extends Thread {
 	 * 执行批量处理的主体
 	 */
 	private void bulk() {
-		for (;; from += size) {
+		long totalMock = 0l;
+		long totalAll = 0l;
+		long totalTook = 0l;
+		for (;from<count; from += size) {
 
 			long mock = System.currentTimeMillis();
 			System.out.println(name + "-" + from + "##Mock: " + mock);
@@ -105,16 +119,29 @@ public class BulkTestThread extends Thread {
 			System.out.println(name + "-" + from + "##Took: " + bulkResponse.getTookInMillis());
 			long mockTime = start - mock;
 			long allTime = end - start;
+			totalMock += mockTime;
+			totalAll += allTime;
+			totalTook += bulkResponse.getTookInMillis();
+			int number = from+size;
+			double avgMock = (from+size)/totalMock;
+			double avgTook = 1.0 * totalTook/number;
+			double avgAll = 1.0 * totalAll/number;
+
+			System.out.println(number);
 			System.out.println(name + "-" + from + "####mock: " + mockTime + " ####all: " + allTime + " ####took: "
 					+ bulkResponse.getTookInMillis());
+			System.out.println(name + "-" + from + "####avgM: " + avgMock + " ####avgA: " + avgAll + " ####avgT: "
+					+ avgTook);
+			System.out.println("**totalMock: " + totalMock + "**totalAll: " + totalAll + "**totalTook: "  + totalTook);
 		}
+		System.out.println("**totalMock: " + totalMock + "**totalAll: " + totalAll + "**totalTook: "  + totalTook);
 	}
 
 	public void bulk2() {
 		long totalMock = 0l;
 		long totalAll = 0l;
 		long totalTook = 0l;
-		for (;from<100000000;from += size) {
+		for (;from<50000000;from += size) {
 
 			long mock = System.currentTimeMillis();
 			System.out.println(name + "-" + from + "##Mock: " + mock);
@@ -125,9 +152,9 @@ public class BulkTestThread extends Thread {
 			System.out.println(name + "-" + from + "##Start: " + start);
 			for (Bill bill : billList) {
 				Integer id = bill.getAccount_number();
-				IndexRequest indexRequest = new IndexRequest("billdoc", "sbc", id.toString()).source(bill.toJson())
+				IndexRequest indexRequest = new IndexRequest("bill_doc", "sbc", id.toString()).source(bill.toJson())
 						.routing(router);
-				IndexRequest indexRequest2 = new IndexRequest("bilnot", "sbc", id.toString()).source(bill.toJson())
+				IndexRequest indexRequest2 = new IndexRequest("bil_not", "sbc", id.toString()).source(bill.toJson())
 						.routing(router);
 				bulkRequest.add(indexRequest);
 				bulkRequest.add(indexRequest2);
@@ -160,7 +187,7 @@ public class BulkTestThread extends Thread {
 	}
 
 	public static void main(String[] args) {
-		BulkTestThread esBulk = new BulkTestThread("test","bilnot");
+		BulkTestThread esBulk = new BulkTestThread("test","bill_test52").size(500000).count(100000000);
 		esBulk.start();
 	}
 }

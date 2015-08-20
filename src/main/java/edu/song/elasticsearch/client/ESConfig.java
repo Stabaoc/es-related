@@ -10,11 +10,11 @@ public class ESConfig {
     
     private final static String ESCONNECT_PROPERTIES = "esconnect.properties";
     
-    public static String clusterName = "Song";
+    public static String clusterName = "CFLog";
     public static String clientModel = "TRANSPORT";
-    public static String host1 = "10.10.103.106";
-    public static String host2 = "10.10.103.106";
-    public static String host3 = "10.10.103.106";
+    public static String host2 = "10.10.103.102";
+    public static String host3 = "10.10.103.102";
+    public static String host1 = "10.10.103.102";
     public static int port = 9300;
     public static String apmindex = "apm_";
     public static String zeromqAddress = "tcp://127.0.0.1:6669";

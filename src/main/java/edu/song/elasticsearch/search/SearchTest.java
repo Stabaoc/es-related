@@ -1,6 +1,7 @@
 package edu.song.elasticsearch.search;
 
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.bootstrap.Bootstrap;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -55,6 +56,6 @@ public class SearchTest {
 	}
 	
 	public static void main(String[] args) {
-		sort();
-	}
+        Bootstrap.main(args);
+    }
 }
